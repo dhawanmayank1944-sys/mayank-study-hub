@@ -8,14 +8,75 @@
 <section class="page" id="goals"><div class="layout"><div class="card"><h3>Create a goal</h3><div class="field"><label>Goal name</label><input id="gTitle" placeholder="Complete 4 Accountancy chapters"></div><div class="row"><div class="field"><label>Category</label><select id="gCat"><option>Study</option><option>Exam marks</option><option>Fitness</option><option>Personal</option></select></div><div class="field"><label>Deadline</label><input id="gDue" type="date"></div></div><div class="row"><div class="field"><label>Target</label><input id="gTarget" placeholder="4 chapters / 90%"></div><div class="field"><label>Progress (%)</label><input id="gProgress" type="number" min="0" max="100" value="0"></div></div><button class="btn" onclick="addGoal()">Add goal</button><div id="goalList"></div></div><div class="card"><h3>Weekly targets</h3><div class="field"><label>Study hours per week</label><input id="weeklyTarget" type="number" step=".5"></div><div class="field"><label>Chapters per week</label><input id="weeklyChapters" type="number"></div><button class="btn" onclick="saveWeekly()">Save targets</button><div id="weeklyProgress" class="note"></div></div></div></section>
 <section class="page" id="attendance"><div class="layout"><div class="card"><h3>Daily study attendance</h3><p class="tiny muted">Opening this app does not count as attendance. Start and complete a study session.</p><div class="field"><label>Subject</label><select id="attSub"></select></div><button class="btn" onclick="checkIn()">Start study session</button><div id="activeSession" class="note">No active session.</div><button class="btn alt" onclick="checkOut()">Mark session completed</button></div><div class="card"><h3>Mark holiday / status</h3><div class="field"><label>Date</label><input id="specialDate" type="date"></div><div class="field"><label>Status</label><select id="specialType"><option>Holiday</option><option>Absent</option><option>Late</option><option>Exam</option></select></div><div class="field"><label>Note</label><input id="specialNote" placeholder="Festival / reason"></div><button class="btn" onclick="addSpecial()">Save calendar entry</button><div id="specialList"></div></div></div><div class="card"><h3>Monthly attendance summary</h3><div id="attendanceSummary"></div><div class="note">Attendance is self-recorded. Holiday dates are not treated as missed days.</div></div></section>
 <section class="page" id="reports"><div class="layout"><div class="card"><h3>WhatsApp study reminders</h3><div class="field"><label>Your WhatsApp number with country code</label><input id="myPhone" placeholder="91XXXXXXXXXX"></div><div class="field"><label>Reminder preference</label><select id="reminderMode"><option>Before every session</option><option>Missed-session follow-up</option><option>Both</option></select></div><div class="field"><label>Reminder lead time (minutes)</label><select id="lead"><option>5</option><option>10</option><option>15</option><option>30</option></select></div><button class="btn" onclick="saveAlerts()">Save preferences</button> <button class="btn alt" onclick="testWhatsApp()">Open WhatsApp test</button><div class="note">Automatic scheduled WhatsApp messages need an approved WhatsApp Business API/provider and secure backend. This browser app can open a pre-filled message, but cannot send unattended messages.</div></div><div class="card"><h3>Weekly parent report</h3><div class="field"><label>Parent / guardian WhatsApp number</label><input id="parentPhone" placeholder="91XXXXXXXXXX"></div><div class="field"><label>Report day</label><select id="reportDay"><option>Sunday</option><option>Saturday</option><option>Monday</option></select></div><div class="field"><label>Report time</label><input id="reportTime" type="time" value="19:00"></div><label><input id="parentConsent" type="checkbox" style="width:auto"> I have permission to share this report.</label><p><button class="btn" onclick="saveAlerts()">Save report settings</button> <button class="btn alt" onclick="sendParentReport()">Preview & share on WhatsApp</button></p><div class="note">Automatic weekly sending needs a backend. This version lets you review and manually share the report.</div></div></div><div class="card"><h3>Weekly performance snapshot</h3><pre id="weeklyReport" style="white-space:pre-wrap;font:12px/1.6 system-ui"></pre></div></section>
-<section class="page" id="settings"><div class="card"><h3>Cloud account & sync</h3><div class="note">Add your Supabase Project URL and Publishable Key. <div class="row"><div class="field"><label>Email</label><input id="authEmail" type="email" placeholder="you@example.com"></div><div class="field"><label>Password</label><input id="authPassword" type="password" placeholder="At least 6 characters"></div></div><button class="btn" onclick="signUpCloud()">Create account</button> <button class="btn alt" onclick="signInCloud()">Login</button> <button class="btn red" onclick="signOutCloud()">Logout</button><p id="cloudStatus" class="note">Not connected.</p><button class="btn" onclick="pushCloud()">Save data to cloud</button> <button class="btn alt" onclick="pullCloud()">Load data from cloud</button><div class="note">First create/login to your account. Then use Save data to cloud. On another device, login and choose Load data from cloud. Email confirmation may be required depending on Supabase settings.</div></div><div class="layout"><div class="card"><h3>Exam schedule</h3><div class="field"><label>Exam name</label><input id="examName" placeholder="RBSE final examination"></div><div class="row"><div class="field"><label>Subject</label><select id="examSub"></select></div><div class="field"><label>Date</label><input id="examDate" type="date"></div></div><button class="btn" onclick="addExam()">Add exam</button><div id="examList"></div></div><div class="card"><h3>Profile & backup</h3><div class="field"><label>Display name</label><input id="displayName" value="Student Welcome!"></div><button class="btn" onclick="saveName()">Save name</button><hr><button class="btn alt" onclick="exportData()">Export backup (JSON)</button><div class="field"><label>Restore backup</label><input id="restoreFile" type="file" accept=".json"></div><button class="btn alt" onclick="restoreData()">Restore backup</button><div class="note">Data is saved in this browser on this device. For laptop + mobile cloud sync, this app must be hosted with secure login and a cloud database.</div></div></div></section><div class="foot">MAYANK DHAWAN · PERSONAL REVISION WORKSPACE</div></main></div>
+<section class="page" id="settings">
+<div class="card">
+<h3>Student Registration & Login</h3>
+
+<h4>Create your student profile</h4>
+
+<div class="field">
+<label>Student Name</label>
+<input id="studentName" type="text" placeholder="Enter your full name">
+</div>
+
+<div class="field">
+<label>Age</label>
+<input id="studentAge" type="number" placeholder="Enter your age">
+</div>
+
+<div class="field">
+<label>Class / Course</label>
+<input id="studentClass" type="text" placeholder="e.g. Class 12">
+</div>
+
+<div class="field">
+<label>Board / University</label>
+<input id="studentBoard" type="text" placeholder="e.g. RBSE">
+</div>
+
+<div class="field">
+<label>Stream</label>
+<select id="studentStream">
+<option value="">Select your stream</option>
+<option>Commerce</option>
+<option>Science</option>
+<option>Arts</option>
+<option>Other</option>
+</select>
+</div>
+
+<hr>
+
+<div class="field">
+<label>Email</label>
+<input id="authEmail" type="email" placeholder="you@example.com">
+</div>
+
+<div class="field">
+<label>Password</label>
+<input id="authPassword" type="password" placeholder="At least 6 characters">
+</div>
+
+<button class="btn" onclick="signUpCloud()">Create account</button>
+<button class="btn alt" onclick="signInCloud()">Login</button>
+<button class="btn red" onclick="signOutCloud()">Logout</button>
+
+<p id="cloudStatus" class="note">Not connected.</p>
+
+<button class="btn" onclick="pushCloud()">Save data to cloud</button>
+<button class="btn alt" onclick="pullCloud()">Load data from cloud</button>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script>
 const S=["Accountancy","Business Studies","English","Computer Science","Hindi"],$=id=>document.getElementById(id),today=()=>{let x=new Date();return new Date(x-x.getTimezoneOffset()*60000).toISOString().slice(0,10)};
-let d=JSON.parse(localStorage.getItem("mayankStudyDesk")||'{"chapters":[],"tasks":[],"routines":[],"logs":[],"goals":[],"special":[],"exams":[],"attendance":[],"active":null,"prefs":{},"alerts":{},"weekly":{}}');
-function save(){localStorage.setItem("mayankStudyDesk",JSON.stringify(d));render()}function esc(x){return String(x??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+let activeDataKey = "mayankStudyDesk";
+let d = JSON.parse(localStorage.getItem(activeDataKey) || '{"chapters":[],"tasks":[],"routines":[],"logs":[],"goals":[],"special":[],"exams":[],"attendance":[],"active":null,"prefs":{},"alerts":{},"weekly":{}}');function save(){
+  localStorage.setItem(activeDataKey,JSON.stringify(d));
+  render();
+}function esc(x){return String(x??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
 ["rSub","tSub","cSub","lSub","examSub","attSub"].forEach(id=>$(id).innerHTML=S.map(s=>`<option>${s}</option>`).join(""));
 document.querySelectorAll(".nav button").forEach(b=>b.onclick=()=>{document.querySelectorAll(".nav button").forEach(x=>x.classList.toggle("active",x===b));document.querySelectorAll(".page").forEach(x=>x.classList.toggle("active",x.id===b.dataset.page))});
-$("greeting").textContent=(new Date().getHours()<12?"Good morning":new Date().getHours()<17?"Good afternoon":"Good evening")+", Mayank.";$("logDate").value=today();$("tDate").value=today();$("specialDate").value=today();
+$("greeting").textContent="Welcome to MD Study Hub";$("logDate").value=today();$("tDate").value=today();$("specialDate").value=today();
 function addRoutine(){let title=$("rTitle").value.trim();if(!title)return alert("Enter an activity.");d.routines.push({id:Date.now(),title,sub:$("rSub").value,start:$("rStart").value,end:$("rEnd").value,days:$("rDays").value});$("rTitle").value="";save()}
 function addTask(){let title=$("tTitle").value.trim();if(!title)return alert("Enter a task.");d.tasks.push({id:Date.now(),title,sub:$("tSub").value,date:$("tDate").value||today(),priority:$("tPriority").value,done:false});$("tTitle").value="";save()}
 function addChapter(){let name=$("cName").value.trim();if(!name)return alert("Enter a chapter.");d.chapters.push({id:Date.now(),sub:$("cSub").value,name,done:false});$("cName").value="";save()}
@@ -33,7 +94,19 @@ function wa(phone,msg){if(!phone)return alert("Enter a WhatsApp number with coun
 function testWhatsApp(){wa(d.alerts?.myPhone,"Study reminder: time to start your planned session. Stay consistent!")}
 function reportText(){let from=new Date();from.setDate(from.getDate()-6);let start=from.toISOString().slice(0,10),logs=d.logs.filter(x=>x.date>=start),hours=logs.reduce((a,x)=>a+(+x.hours||0),0),done=d.chapters.filter(x=>x.done).length,att=d.attendance.filter(x=>x.date>=start),present=att.filter(x=>x.status==="Present").length,absent=d.special.filter(x=>x.date>=start&&x.type==="Absent").length,pending=d.tasks.filter(x=>!x.done&&x.date>=start).length;return `Student Welcome! — Weekly Study Report\nPeriod: ${start} to ${today()}\nStudy hours: ${hours.toFixed(1)}\nStudy logs: ${logs.length}\nCompleted attendance sessions: ${present}\nMissed days marked: ${absent}\nChapters completed: ${done}/${d.chapters.length}\nPending tasks: ${pending}\nGoals: ${d.goals.map(g=>g.title+" ("+g.progress+"%)").join("; ")||"No goals yet"}`}
 function sendParentReport(){if(!d.alerts?.consent)return alert("Please confirm permission to share this report.");wa(d.alerts.parentPhone,reportText())}
-function saveName(){let n=$("displayName").value.trim()||"Student Welcome!";$("brandName").textContent=n;$("profileName").textContent=n;alert("Name updated.")}
+
+function saveName(){
+  let n = $("displayName").value.trim() || "Student Welcome!";
+
+  if(cloudUser){
+    cloudMsg("Your account name is managed by your student profile.");
+    return;
+  }
+
+  $("brandName").textContent = n;
+  $("profileName").textContent = n;
+  alert("Name updated.");
+}
 function exportData(){let a=document.createElement("a"),u=URL.createObjectURL(new Blob([JSON.stringify(d,null,2)],{type:"application/json"}));a.href=u;a.download="mayank-study-backup.json";a.click();URL.revokeObjectURL(u)}
 function restoreData(){let f=$("restoreFile").files[0];if(!f)return alert("Choose a backup file.");let r=new FileReader();r.onload=()=>{try{d=JSON.parse(r.result);save();alert("Backup restored.")}catch(e){alert("Invalid backup file.")}};r.readAsText(f)}
 function render(){let total=d.chapters.length,done=d.chapters.filter(x=>x.done).length,p=total?Math.round(done/total*100):0;$("overall").textContent=p+"%";$("chapStat").textContent=done+" / "+total;$("hourStat").textContent=d.logs.reduce((a,x)=>a+(+x.hours||0),0).toFixed(1)+"h";$("goalStat").textContent=d.goals.filter(x=>x.progress<100).length;$("pendingStat").textContent=d.tasks.filter(x=>!x.done).length;
@@ -68,9 +141,144 @@ function ensureCloud(){
   }
   return true;
 }
-async function signUpCloud(){if(!ensureCloud())return;let email=$("authEmail").value.trim(),password=$("authPassword").value;if(!email||password.length<6){cloudMsg("Enter email and a password of at least 6 characters.");return}let {data,error}=await sb.auth.signUp({email,password});cloudMsg(error?error.message:(data.session?"Account created and logged in.":"Account created. Check your email for confirmation, then login."))}
-async function signInCloud(){if(!ensureCloud())return;let {data,error}=await sb.auth.signInWithPassword({email:$("authEmail").value.trim(),password:$("authPassword").value});cloudUser=data?.user||null;cloudMsg(error?error.message:(cloudUser?"Logged in as "+cloudUser.email:"Login failed."))}
-async function signOutCloud(){if(!ensureCloud())return;let {error}=await sb.auth.signOut();cloudUser=null;cloudMsg(error?error.message:"Logged out.")}
+
+function applyStudentProfile(user){
+  if(!user) return;
+
+  const p = user.user_metadata || {};
+  const name = p.student_name || user.email.split("@")[0];
+
+  if($("brandName")) $("brandName").textContent = name;
+  if($("profileName")) $("profileName").textContent = name;
+  if($("displayName")) $("displayName").value = name;
+
+  const hour = new Date().getHours();
+  const greeting = hour < 12 ? "Good morning" :
+                   hour < 17 ? "Good afternoon" : "Good evening";
+
+  if($("greeting")) $("greeting").textContent = greeting + ", " + name + ".";
+}
+
+
+async function signUpCloud(){
+  if(!ensureCloud()) return;
+
+  const name = $("studentName").value.trim();
+  const age = $("studentAge").value;
+  const studentClass = $("studentClass").value.trim();
+  const board = $("studentBoard").value.trim();
+  const stream = $("studentStream").value;
+  const email = $("authEmail").value.trim();
+  const password = $("authPassword").value;
+
+  if(!name || !age || !studentClass || !board || !stream || !email || password.length < 6){
+    cloudMsg("Please fill all details correctly.");
+    return;
+  }
+
+  const {data,error} = await sb.auth.signUp({
+    email,
+    password,
+    options:{
+      data:{
+        student_name:name,
+        age:age,
+        student_class:studentClass,
+        board:board,
+        stream:stream
+      }
+    }
+  });
+
+  if(error){
+    cloudMsg(error.message);
+    return;
+  }
+
+  if(data.user){
+    cloudUser = data.user;
+    if(data.session){
+      activeDataKey = "mayankStudyDesk_" + data.user.id;
+      d = JSON.parse(localStorage.getItem(activeDataKey) || "null") || emptyStudentData();
+      save();
+      applyStudentProfile(data.user);
+    }
+  }
+
+  cloudMsg(data.session
+    ? "Welcome " + name + "! Your account is ready."
+    : "Account created! Please confirm your email, then login.");
+}
+
+
+function emptyStudentData(){
+  return {
+    chapters:[],tasks:[],routines:[],logs:[],
+    goals:[],special:[],exams:[],attendance:[],
+    active:null,prefs:{},alerts:{},weekly:{}
+  };
+}
+
+async function signInCloud(){
+  if(!ensureCloud()) return;
+
+  const {data,error} = await sb.auth.signInWithPassword({
+    email:$("authEmail").value.trim(),
+    password:$("authPassword").value
+  });
+
+  if(error){
+    cloudMsg(error.message);
+    return;
+  }
+
+  cloudUser = data.user;
+  activeDataKey = "mayankStudyDesk_" + cloudUser.id;
+
+  const {data:cloudData,error:loadError} = await sb
+    .from("study_data")
+    .select("data")
+    .eq("user_id",cloudUser.id)
+    .maybeSingle();
+
+  if(loadError){
+    cloudMsg("Data loading error: " + loadError.message);
+    return;
+  }
+
+  if(cloudData && cloudData.data){
+    d = cloudData.data;
+  } else {
+    d = JSON.parse(localStorage.getItem(activeDataKey) || "null") || emptyStudentData();
+  }
+
+  save();
+  applyStudentProfile(cloudUser);
+  cloudMsg("Welcome, " + (cloudUser.user_metadata?.student_name || cloudUser.email) + "!");
+}
+
+async function signOutCloud(){
+  if(!ensureCloud()) return;
+
+  const {error} = await sb.auth.signOut();
+
+  if(error){
+    cloudMsg(error.message);
+    return;
+  }
+
+  cloudUser = null;
+  activeDataKey = "mayankStudyDesk_guest";
+  d = emptyStudentData();
+  save();
+
+  if($("brandName")) $("brandName").textContent = "Student Welcome!";
+  if($("profileName")) $("profileName").textContent = "Student Welcome!";
+  if($("greeting")) $("greeting").textContent = "Welcome to MD Study Hub";
+
+  cloudMsg("Logged out. Your personal data is hidden.");
+}
+
 async function pushCloud(){if(!ensureCloud())return;let {data:{user},error:ae}=await sb.auth.getUser();if(ae||!user){cloudMsg("Please login first.");return}let {error}=await sb.from("study_data").upsert({user_id:user.id,data:d,updated_at:new Date().toISOString()},{onConflict:"user_id"});cloudMsg(error?"Cloud save error: "+error.message:"Your study data is saved to cloud.")}
 async function pullCloud(){if(!ensureCloud())return;let {data:{user},error:ae}=await sb.auth.getUser();if(ae||!user){cloudMsg("Please login first.");return}if(!confirm("Load cloud data and replace the data currently in this browser? Export a backup first if needed."))return;let {data,error}=await sb.from("study_data").select("data").eq("user_id",user.id).maybeSingle();if(error){cloudMsg("Cloud load error: "+error.message);return}if(!data){cloudMsg("No cloud backup found for this account yet.");return}d=data.data;save();cloudMsg("Cloud data loaded successfully.")}
 window.addEventListener("load",()=>{if($("sbUrl")){ $("sbUrl").value=localStorage.getItem("mayankSbUrl")||"";$("sbKey").value=localStorage.getItem("mayankSbKey")||"";if(localStorage.getItem("mayankSbUrl"))cloudMsg("Cloud settings found on this device. Click Save cloud settings to connect.")}});
