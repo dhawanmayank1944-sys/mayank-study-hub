@@ -55,10 +55,19 @@ $("weeklyTarget").value=d.weekly?.hours||"";$("weeklyChapters").value=d.weekly?.
 $("myPhone").value=d.alerts?.myPhone||"";$("reminderMode").value=d.alerts?.mode||"Before every session";$("lead").value=d.alerts?.lead||"10";$("parentPhone").value=d.alerts?.parentPhone||"";$("reportDay").value=d.alerts?.day||"Sunday";$("reportTime").value=d.alerts?.time||"19:00";$("parentConsent").checked=!!d.alerts?.consent}
 render();
 
-let sb=null, cloudUser=null;
+const SUPABASE_URL = "https://tuxfofwdjyaukbcdiclw.supabase.co"; const SUPABASE_KEY = "sb_publishable_5jzgJ2QmKsiy4vXVUbPi0w_H5-VFQsJ";  let sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY); let cloudUser = null;
 function cloudMsg(t){if($("cloudStatus"))$("cloudStatus").textContent=t}
-function connectCloud(){let url=$("sbUrl").value.trim(),key=$("sbKey").value.trim();if(!/^https:\/\/.+/.test(url)||!key.startsWith("sb_publishable_")){cloudMsg("Check Project URL and Publishable Key.");return}localStorage.setItem("mayankSbUrl",url);localStorage.setItem("mayankSbKey",key);sb=window.supabase.createClient(url,key);cloudMsg("Cloud settings saved. Now create an account or login.")}
-function ensureCloud(){if(!sb){let u=localStorage.getItem("mayankSbUrl"),k=localStorage.getItem("mayankSbKey");if(u&&k)sb=window.supabase.createClient(u,k)}if(!sb){cloudMsg("First enter URL and Publishable Key, then Save cloud settings.");return false}return true}
+function connectCloud(){
+  sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+  cloudMsg("Cloud connected. Now create an account or login.");
+}
+
+function ensureCloud(){
+  if(!sb){
+    sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+  }
+  return true;
+}
 async function signUpCloud(){if(!ensureCloud())return;let email=$("authEmail").value.trim(),password=$("authPassword").value;if(!email||password.length<6){cloudMsg("Enter email and a password of at least 6 characters.");return}let {data,error}=await sb.auth.signUp({email,password});cloudMsg(error?error.message:(data.session?"Account created and logged in.":"Account created. Check your email for confirmation, then login."))}
 async function signInCloud(){if(!ensureCloud())return;let {data,error}=await sb.auth.signInWithPassword({email:$("authEmail").value.trim(),password:$("authPassword").value});cloudUser=data?.user||null;cloudMsg(error?error.message:(cloudUser?"Logged in as "+cloudUser.email:"Login failed."))}
 async function signOutCloud(){if(!ensureCloud())return;let {error}=await sb.auth.signOut();cloudUser=null;cloudMsg(error?error.message:"Logged out.")}
