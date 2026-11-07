@@ -79,10 +79,21 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script>
 const S=["Accountancy","Business Studies","Economics","English","Hindi","Computer Science","Mathematics"],$=id=>document.getElementById(id),today=()=>{let x=new Date();return new Date(x-x.getTimezoneOffset()*60000).toISOString().slice(0,10)};
 let activeDataKey = "mayankStudyDesk";
-let d = JSON.parse(localStorage.getItem(activeDataKey) || '{"chapters":[],"tasks":[],"routines":[],"logs":[],"goals":[],"special":[],"exams":[],"attendance":[],"active":null,"prefs":{},"alerts":{},"weekly":{}}');function save(){
+let d = JSON.parse(localStorage.getItem(activeDataKey) || '{"chapters":[],"tasks":[],"routines":[],"logs":[],"goals":[],"special":[],"exams":[],"attendance":[],"active":null,"prefs":{},"alerts":{},"weekly":{}}');let cloudSaveTimer = null;
+
+function save(){
   localStorage.setItem(activeDataKey,JSON.stringify(d));
   render();
-}function esc(x){return String(x??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+
+  if(cloudUser){
+    clearTimeout(cloudSaveTimer);
+
+    cloudSaveTimer = setTimeout(()=>{
+      pushCloud();
+    },1000);
+  }
+}
+function esc(x){return String(x??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
 ["rSub","tSub","cSub","lSub","examSub","attSub"].forEach(id=>{let el=$(id);if(el)el.innerHTML=S.map(s=>`<option>${s}</option>`).join("")});
 document.querySelectorAll(".nav button").forEach(b=>b.onclick=()=>{document.querySelectorAll(".nav button").forEach(x=>x.classList.toggle("active",x===b));document.querySelectorAll(".page").forEach(x=>x.classList.toggle("active",x.id===b.dataset.page))});
 $("greeting").textContent="Welcome to MD Study Hub";$("logDate").value=today();$("tDate").value=today();$("specialDate").value=today();
@@ -290,8 +301,32 @@ async function signOutCloud(){
   cloudMsg("Logged out. Your personal data is hidden.");
 }
 
-async function pushCloud(){if(!ensureCloud())return;let {data:{user},error:ae}=await sb.auth.getUser();if(ae||!user){cloudMsg("Please login first.");return}let {error}=await sb.from("study_data").upsert({user_id:user.id,data:d,updated_at:new Date().toISOString()},{onConflict:"user_id"});cloudMsg(error?"Cloud save error: "+error.message:"Your study data is saved to cloud.")}
-async function pullCloud(){if(!ensureCloud())return;let {data:{user},error:ae}=await sb.auth.getUser();if(ae||!user){cloudMsg("Please login first.");return}if(!confirm("Load cloud data and replace the data currently in this browser? Export a backup first if needed."))return;let {data,error}=await sb.from("study_data").select("data").eq("user_id",user.id).maybeSingle();if(error){cloudMsg("Cloud load error: "+error.message);return}if(!data){cloudMsg("No cloud backup found for this account yet.");return}d=data.data;save();cloudMsg("Cloud data loaded successfully.")} 
+async function pushCloud(){
+  if(!ensureCloud()) return;
+
+  const {data:{user},error:ae} = await sb.auth.getUser();
+
+  if(ae || !user){
+    cloudMsg("Please login first.");
+    return;
+  }
+
+  if(!cloudUser || cloudUser.id !== user.id ||
+     activeDataKey !== "mayankStudyDesk_" + user.id){
+    cloudMsg("Account mismatch. Cloud save stopped for safety.");
+    return;
+  }
+
+  const {error} = await sb.from("study_data").upsert({
+    user_id:user.id,
+    data:d,
+    updated_at:new Date().toISOString()
+  },{onConflict:"user_id"});
+
+  cloudMsg(error
+    ? "Cloud save error: " + error.message
+    : "Your study data is automatically saved to cloud.");
+}async function pullCloud(){if(!ensureCloud())return;let {data:{user},error:ae}=await sb.auth.getUser();if(ae||!user){cloudMsg("Please login first.");return}if(!confirm("Load cloud data and replace the data currently in this browser? Export a backup first if needed."))return;let {data,error}=await sb.from("study_data").select("data").eq("user_id",user.id).maybeSingle();if(error){cloudMsg("Cloud load error: "+error.message);return}if(!data){cloudMsg("No cloud backup found for this account yet.");return}d=data.data;save();cloudMsg("Cloud data loaded successfully.")} 
 async function restoreCloudSession(){
   if(!ensureCloud()) return;
 
