@@ -284,4 +284,6 @@ async function signOutCloud(){
 async function pushCloud(){if(!ensureCloud())return;let {data:{user},error:ae}=await sb.auth.getUser();if(ae||!user){cloudMsg("Please login first.");return}let {error}=await sb.from("study_data").upsert({user_id:user.id,data:d,updated_at:new Date().toISOString()},{onConflict:"user_id"});cloudMsg(error?"Cloud save error: "+error.message:"Your study data is saved to cloud.")}
 async function pullCloud(){if(!ensureCloud())return;let {data:{user},error:ae}=await sb.auth.getUser();if(ae||!user){cloudMsg("Please login first.");return}if(!confirm("Load cloud data and replace the data currently in this browser? Export a backup first if needed."))return;let {data,error}=await sb.from("study_data").select("data").eq("user_id",user.id).maybeSingle();if(error){cloudMsg("Cloud load error: "+error.message);return}if(!data){cloudMsg("No cloud backup found for this account yet.");return}d=data.data;save();cloudMsg("Cloud data loaded successfully.")}
 window.addEventListener("load",()=>{if($("sbUrl")){ $("sbUrl").value=localStorage.getItem("mayankSbUrl")||"";$("sbKey").value=localStorage.getItem("mayankSbKey")||"";if(localStorage.getItem("mayankSbUrl"))cloudMsg("Cloud settings found on this device. Click Save cloud settings to connect.")}});
+<div id="examList"></div>
 </script></body></html>
+
