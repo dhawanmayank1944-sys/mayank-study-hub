@@ -74,7 +74,7 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script>
-const S=["Accountancy","Business Studies","English","Computer Science","Hindi"],$=id=>document.getElementById(id),today=()=>{let x=new Date();return new Date(x-x.getTimezoneOffset()*60000).toISOString().slice(0,10)};
+const S=["Accountancy","Business Studies","Economics","Mathematics","English","Computer Science","Hindi"],$=id=>document.getElementById(id),today=()=>{let x=new Date();return new Date(x-x.getTimezoneOffset()*60000).toISOString().slice(0,10)};
 let activeDataKey = "mayankStudyDesk";
 let d = JSON.parse(localStorage.getItem(activeDataKey) || '{"chapters":[],"tasks":[],"routines":[],"logs":[],"goals":[],"special":[],"exams":[],"attendance":[],"active":null,"prefs":{},"alerts":{},"weekly":{}}');function save(){
   localStorage.setItem(activeDataKey,JSON.stringify(d));
