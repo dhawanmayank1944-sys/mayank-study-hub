@@ -157,11 +157,11 @@ function applyStudentProfile(user){
                    hour < 17 ? "Good afternoon" : "Good evening";
 
   if($("greeting")) $("greeting").textContent = greeting + ", " + name + ".";
-}
-if($("studentWelcome")) {
-  $("studentWelcome").textContent = "Welcome back, " + name + "!";
-}
 
+  if($("studentWelcome")) {
+    $("studentWelcome").textContent = "Welcome back, " + name + "!";
+  }
+}
 async function signUpCloud(){
   if(!ensureCloud()) return;
 
