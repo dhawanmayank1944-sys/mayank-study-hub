@@ -74,7 +74,7 @@ let d = JSON.parse(localStorage.getItem(activeDataKey) || '{"chapters":[],"tasks
   localStorage.setItem(activeDataKey,JSON.stringify(d));
   render();
 }function esc(x){return String(x??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
-["rSub","tSub","cSub","lSub","examSub","attSub"].forEach(id=>$(id).innerHTML=S.map(s=>`<option>${s}</option>`).join(""));
+["rSub","tSub","cSub","lSub","examSub","attSub"].forEach(id=>{let el=$(id);if(el)el.innerHTML=S.map(s=>`<option>${s}</option>`).join("")});
 document.querySelectorAll(".nav button").forEach(b=>b.onclick=()=>{document.querySelectorAll(".nav button").forEach(x=>x.classList.toggle("active",x===b));document.querySelectorAll(".page").forEach(x=>x.classList.toggle("active",x.id===b.dataset.page))});
 $("greeting").textContent="Welcome to MD Study Hub";$("logDate").value=today();$("tDate").value=today();$("specialDate").value=today();
 function addRoutine(){let title=$("rTitle").value.trim();if(!title)return alert("Enter an activity.");d.routines.push({id:Date.now(),title,sub:$("rSub").value,start:$("rStart").value,end:$("rEnd").value,days:$("rDays").value});$("rTitle").value="";save()}
